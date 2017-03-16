@@ -35,7 +35,7 @@ def main():
             silva_lst.append(silvafamily[i])
     
     silva_fam=[taxa.name for taxa in silva_lst]
-    
+  
     for i in range(0,len(silva_fam)):
         randomTaxa=random.choice(silva_fam)
 
