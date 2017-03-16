@@ -160,6 +160,7 @@ def main():
 
 		#Calcule the amount of each score in each taxonomic level
         scorePerLevel(errorList, score_total)
+	
 		#Reinitialize the list
         errorList=[]
         
