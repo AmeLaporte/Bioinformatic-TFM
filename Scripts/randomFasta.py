@@ -11,7 +11,6 @@ def getIndex(txt,mot1,mot2,int1,int2):
         
     Returns:
        The function return the same thing than if we've had used the index method but simplified to have a clearer code.
-  
     """
     txt=txt[txt.index(mot1)+int1:txt.index(mot2,txt.index(mot1))+int2]
     return txt
