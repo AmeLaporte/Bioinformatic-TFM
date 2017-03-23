@@ -1,17 +1,17 @@
 '''
 Created on Mar 7, 2017
 
-@author: andersl
+@author: andersl, amelaporte
 '''
-from LCAClassifier.taxa import CRESTree
+
+
 from LCAClassifier.classify import ClassificationTree
 from LCAClassifier.config import config
 import sys
-from Bio import Phylo
+
 
 def getIndex(txt,mot1,mot2,int1,int2):
-    """This function is written by LAPORTE Amelie.
-
+    """
     Args:
        txt:correspond to the genbank entry stored in memory with the readFlatFile function.
        mot1, mot2: the words used as index to separate the information.
@@ -25,7 +25,7 @@ def getIndex(txt,mot1,mot2,int1,int2):
     return txt
 
 def parserFasta(filename,acs,pth):
-    """This function is written by LAPORTE Amelie.
+    """
     Args:
        filename:The FASTA file of the population you want to compare to the reference.
        acs:The list containing the accession numbers. 
@@ -42,16 +42,15 @@ def parserFasta(filename,acs,pth):
     for i in range(0,len(source),2):
         if '>' in source[i]:
             #to store accession number in list
-            acs.append(getIndex(source[i],">","\t",1,0))
+            acs.append(getIndex(source[i],">"," ",1,0))
             #to store taxonomic pathways in list
-            pth1=(getIndex(source[i],"\t","\n",1,0))
+            pth1=(getIndex(source[i]," ","\n",1,0))
             pth.append(pth1.split(";"))
     sourceText.close()
     return acs,pth
 
 def counter(sftLst,refLst,errLst):
-    """This function is written by LAPORTE Amelie.
-
+    """
     Args:
        lst1:correspond to the taxonomic pathway list of the FASTA file.
        lst2:correspond to the taxonomic pathway list of the Reference tree.
@@ -75,25 +74,26 @@ def counter(sftLst,refLst,errLst):
             
         elif sftLst[i]!=refLst[i] and sftLst[i]=="None":
             errLst.append("FN")
+        
     return errLst
 
 def correctLength(lst):
-    """This function is written by LAPORTE Amelie.
-
+    """
     Args:
        lst: correspond to the list we want to correct the length in order to compare it in the counter function.
         
     Returns:
        A list of length=8.
-  
     """
     while len(lst)<8:
         lst.append("None")
+    for i in range(0,len(lst)):
+        if lst[i]=="No hits":
+            lst[i]="None"
     return lst
 
 def scorePerLevel(lst,dict):
-    """This function is written by LAPORTE Amelie.
-
+    """
     Args:
         lst: correspond to the list of score in each taxonomic level of each accession number.
         dict: Is a list of 8 dictionaries (for each level) containing the 4 score possible
@@ -115,7 +115,7 @@ def scorePerLevel(lst,dict):
 def main():
     
     #Creation of the phylogenetic tree from the database
-    database="silvamod"
+    database="unite"
     mapFile = ("%s/%s.map" %
                (config.DATABASES[database], database))
     treFile = ("%s/%s.tre" %
@@ -133,6 +133,7 @@ def main():
     
     #Parse the FASTA file
     parserFasta(fastafile, accessionListFasta, seqPath)
+    
     #Set the result lists
     errorList=[]
     matrix=[]
@@ -149,30 +150,43 @@ def main():
 
 
     for i in range(0,len(accessionListFasta)):
-        acsNumber=accessionListFasta[i]
-        refAcs=reftree.getNode(acsNumber)
-        dbPath=reftree.getPath(refAcs)
-        refPath=[taxa.name for taxa in dbPath]
+        if reftree.getNode(accessionListFasta[i]):
+            dbPath=reftree.getPath(reftree.getNode(accessionListFasta[i]))
+            refPath=[taxa.name for taxa in dbPath]
         
+    
         #Count the TP,FP,TN,FN in the result
-        counter(correctLength(seqPath[i]),correctLength(refPath[:-1]),errorList)
-        matrix.append(errorList)
+            counter(correctLength(seqPath[i]),correctLength(refPath[:-1]),errorList)
+            matrix.append(errorList)
 
-		#Calcule the amount of each score in each taxonomic level
-        scorePerLevel(errorList, score_total)
-	
-		#Reinitialize the list
-        errorList=[]
+        #Calcule the amount of each score in each taxonomic level
+            scorePerLevel(errorList, score_total)
+
+        #Reinitialize the list
+            errorList=[]
+        
+        else:
+            pass
         
         #Remove the hash to verify the score for each domain of each accession number
-        #resultList=zip(taxaName,matrix[i])
-        #print accessionListFasta[i], '\t', resultList
-        #print seqPath[i],'\n', refPath[:-1],'\n\n'
-    
+        resultList=zip(taxaName,matrix[i])
+        print accessionListFasta[i], '\t', resultList
+        print seqPath[i],'\n', refPath[:-1],'\n\n'
+        
+        
+        
     #total score output
     for i in range(0,len(score_total)):
         print taxaName[i],'\n\t','%s' % (score_total[i])
     
+    outName=sys.argv[2]
+
+    with open(outName,"w") as output:
+        for i in range(0,len(score_total)):
+            print >> output, taxaName[i]
+            output.writelines('{}\t{}\n'.format(k,v) for k,v in score_total[i].items())
+            print >>output, '\n'
+    output.close()
     
 
 if __name__ == '__main__':
