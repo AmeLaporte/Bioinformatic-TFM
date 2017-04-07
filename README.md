@@ -32,6 +32,7 @@
 ## Evaluation Script:
 
 **Scripts used:**
+
 * Scripts/Python/evaluate.py
 
 	* To calculate the score of each level *(for example: for one family deleted)*: the output is a table of four different scores *(True positive, True negative, False positive, False negative)* at each level. 
@@ -61,6 +62,7 @@ python + bash script
 ## Clade partition cross validation script:
 ### For LCA classifier:
 **Scripts used:**
+
 	* Scripts/Python/cpx_lca.py
 	
 	* Scripts/Bash/pipeline_cpx_lca_250bp.sh
@@ -70,6 +72,7 @@ python + bash script
 
 ### For Sintax:
 **Scripts used:**
+
 	* Scripts/Python/cpx_sintax.py
 
 
@@ -78,6 +81,7 @@ python + bash script
 ## Ten fold cross validation script:
 ### For LCA classifier:
 **Scripts used:**
+
 	* Scripts/Python/random10.py
 	
 	* Scripts/Bash/random10_pipeline_lca_250bp.sh
@@ -86,6 +90,7 @@ python + bash script
 
 ### For Sintax:
 **Scripts used:**
+
 	* Scripts/Python/random10sintax.py
 
 ---------
