@@ -1,15 +1,15 @@
 # CREST evaluation
 
 ## Objectives:
-* Testing the software and comparing it to other tools that are commonly used or new on the market.*
+*Testing the software and comparing it to other tools that are commonly used or new on the market.*
 
 ------------
 
 ## Pipeline followed:
 1. Test with clade partition cross validation.
-	* We delete a whole taxon from the database and we test the deleted sequence against the troncated database. *
+	*We delete a whole taxon from the database and we test the deleted sequence against the troncated database.*
 2. Test with ten fold cross validation.
-	* We delete 10% of the sequence from the database and we test them against the new database. *
+	*We delete 10% of the sequence from the database and we test them against the new database.*
 3. Calculation of the accuracy of the classifier.
 
 ## Steps:
@@ -27,9 +27,9 @@
 
 ## Evaluation Script:
 
-** Scripts used: **
+**Scripts used:**
 * Scripts/Python/evaluate.py
-	* To calculate the score of each level *(for example: for one family deleted) *: the output is a table of four different scores * (True positive, True negative, False positive, False negative)* at each level. 
+	* To calculate the score of each level *(for example: for one family deleted)*: the output is a table of four different scores *(True positive, True negative, False positive, False negative)* at each level. 
 * Scripts/Bash/calculate_all_score.sh
 	* To calculate the score of all the taxon deleted
 
@@ -49,18 +49,18 @@ python + bash script
 * Use of the ART tool to simulate Illumina sequencing on the files outputed from a known database. (all the sequences have then a length of 250bp).
 * The sequence are full length, no tool have been use to simulate errors
 
-** BLAST is used for the alignment and the creation of database files to change the native database with the troncated ones **
+**BLAST is used for the alignment and the creation of database files to change the native database with the troncated ones**
 
 ## Clade partition cross validation script:
 ### For LCA classifier:
-** Scripts used: **
+**Scripts used:**
 	* Scripts/Python/cpx_lca.py
 	* Scripts/Bash/pipeline_cpx_lca_250bp.sh
 	* Scripts/Bash/pipeline_cpx_lca_FL.sh
 
 
 ### For Sintax:
-** Scripts used: **
+**Scripts used:**
 	* Scripts/Python/cpx_sintax.py
 
 
@@ -68,13 +68,13 @@ python + bash script
 
 ## Ten fold cross validation script:
 ### For LCA classifier:
-** Scripts used: **
+**Scripts used:**
 	* Scripts/Python/random10.py
 	* Scripts/Bash/random10_pipeline_lca_250bp.sh
 	* Scripts/Bash/random10_pipeline_lca_FL.sh
 
 ### For Sintax:
-** Scripts used: **
+**Scripts used:**
 	* Scripts/Python/random10sintax.py
 
 ---------
