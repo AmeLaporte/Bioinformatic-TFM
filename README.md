@@ -7,9 +7,13 @@
 
 ## Pipeline followed:
 1. Test with clade partition cross validation.
+
 	*We delete a whole taxon from the database and we test the deleted sequence against the troncated database.*
+	
 2. Test with ten fold cross validation.
+
 	*We delete 10% of the sequence from the database and we test them against the new database.*
+	
 3. Calculation of the accuracy of the classifier.
 
 ## Steps:
@@ -20,8 +24,8 @@
 ## Software tested:
 * [ ] LCA classifier (CREST)
 * [ ] SINTAX
-* [ ]  UTax
-* [ ]  QIIME
+* [ ] UTAX
+* [ ] QIIME
 
 -----------
 
@@ -29,8 +33,11 @@
 
 **Scripts used:**
 * Scripts/Python/evaluate.py
+
 	* To calculate the score of each level *(for example: for one family deleted)*: the output is a table of four different scores *(True positive, True negative, False positive, False negative)* at each level. 
+	
 * Scripts/Bash/calculate_all_score.sh
+
 	* To calculate the score of all the taxon deleted
 
 * True positive = What is expected is what is obtained
@@ -55,7 +62,9 @@ python + bash script
 ### For LCA classifier:
 **Scripts used:**
 	* Scripts/Python/cpx_lca.py
+	
 	* Scripts/Bash/pipeline_cpx_lca_250bp.sh
+	
 	* Scripts/Bash/pipeline_cpx_lca_FL.sh
 
 
@@ -70,7 +79,9 @@ python + bash script
 ### For LCA classifier:
 **Scripts used:**
 	* Scripts/Python/random10.py
+	
 	* Scripts/Bash/random10_pipeline_lca_250bp.sh
+	
 	* Scripts/Bash/random10_pipeline_lca_FL.sh
 
 ### For Sintax:
