@@ -1,3 +1,7 @@
+'''
+@author: AmeLaporte
+'''
+
 import sys
 import random
 from Bio import SeqIO
@@ -17,9 +21,11 @@ def getIndex(txt,mot1,mot2,int1,int2):
 
 
 def main ():
+    #Open the Sintax database of your choice
     database_sintax=sys.argv[1]
     unite_db_sintax=open(database_sintax,'r')
 
+    #Open the CREST database you want to compare with
     database_lca=sys.argv[2]
     unite_db_lca=open(database_lca,'r')
 
@@ -58,14 +64,15 @@ def main ():
             #Create the dictionary of those sequences 
             dict_acs_sintax[acs]=dict_acs_seq_sintax[acs]
 
-        
     unite_db_sintax.close()
     unite_db_lca.close()
 
+    #To change automatically the name of the taxon in the bash script
     taxon_name=sys.argv[3]
 
     random_dct={}
 
+    #Select randomly 10% of accession numbers (+taxonomic annotations) and create a dictionary of these numbers with their corresponding sequence.
     perc=len(lst_short_sintax)*10/100
     for i in range(0,perc):
         random_dct[random.choice(lst_short_sintax)]=''
@@ -75,11 +82,13 @@ def main ():
             if j == i:
                 random_dct[j]=dict_acs_sintax[j]
 
+    #Output the random sequence FASTA file in SINTAX taxonomic annotation format.
     with open(taxon_name+'_random10.fasta','w') as output3:
         for acs in random_dct:
             print >> output3, '>'+random_dct[acs]['name'],'\n',random_dct[acs]['sequence']
     output3.close()
 
+    #Output the troncated database FASTA file in SINTAX taxonomic annotation format.
     for acs in random_dct:
         if acs in dict_acs_sintax:
             del dict_acs_sintax[acs]

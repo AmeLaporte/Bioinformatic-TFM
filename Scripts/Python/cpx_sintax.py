@@ -16,9 +16,11 @@ def getIndex(txt,mot1,mot2,int1,int2):
 
 
 def main ():
+    #Open the Sintax database of your choice
     database_sintax=sys.argv[1]
     unite_db_sintax=open(database_sintax,'r')
 
+    #Open the CREST database you want to compare with
     database_lca=sys.argv[2]
     unite_db_lca=open(database_lca,'r')
 
@@ -129,12 +131,16 @@ def main ():
 
         dict_acs_taxon_sintax[number]={'domain':domain,'phylum':phylum,'class':classe,'order':order,'family':family,'genus':genus,'specie':specie}
 
+    #To select a taxon to delete from the database.
     taxon_name=sys.argv[3]
     
+	#Outputs: 1) the taxonomic level sequences selected, 2) the troncated database without the taxonomic level selected.
     with open(taxon_name+'.fasta','w') as output1:
         with open(taxon_name+'_db.fasta','w') as output2:
             for acs in lst_short_sintax:
-                #Change the taxonomic level you want to delete
+
+                #TODO: Change everytime the taxonomic level keyword you want to delete.
+
                 if taxon_name in dict_acs_taxon_sintax[acs]['class']:
                     print >> output1, '>'+dict_acs_sintax[acs]['name'],'\n',dict_acs_sintax[acs]['sequence']
                     del dict_acs_sintax[acs]
