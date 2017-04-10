@@ -1,7 +1,7 @@
 '''
 Created on Mar 7, 2017
 
-@author: andersl, amelaporte
+@author: andersl, ameliel
 '''
 
 
@@ -25,6 +25,7 @@ def getIndex(txt,mot1,mot2,int1,int2):
     return txt
 
 def parserFasta(filename,acs,pth):
+	#TODO: change by using the biopython parser.
     """
     Args:
        filename:The FASTA file of the population you want to compare to the reference.
@@ -92,25 +93,25 @@ def correctLength(lst):
             lst[i]="None"
     return lst
 
-def scorePerLevel(lst,dict):
+def scorePerLevel(lst,dct):
     """
     Args:
         lst: correspond to the list of score in each taxonomic level of each accession number.
-        dict: Is a list of 8 dictionaries (for each level) containing the 4 score possible
+        dct: Is a list of 8 dictionaries (for each level) containing the 4 score possible
     Returns:
        returns the list of dictionaries containing the scores at each taxonomic level
   
     """
     for i in range(0,len(lst)):
             if lst[i]=='TP':
-                dict[i]['True Positive']+=1
+                dct[i]['True Positive']+=1
             if lst[i]=='FP':
-                dict[i]['False Positive']+=1
+                dct[i]['False Positive']+=1
             if lst[i]=='TN':
-                dict[i]['True Negative']+=1
+                dct[i]['True Negative']+=1
             if lst[i]=='FN':
-                dict[i]['False Negative']+=1      
-    return dict
+                dct[i]['False Negative']+=1      
+    return dct
         
 def main():
     
