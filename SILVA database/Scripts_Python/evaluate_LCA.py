@@ -3,10 +3,9 @@ Created on Mar 7, 2017
 
 @author: andersl, ameliel
 '''
-
-
 from LCAClassifier.classify import ClassificationTree
 from LCAClassifier.config import config
+
 import sys
 
 
@@ -32,25 +31,17 @@ def parserFasta(filename,acs,pth):
        pth:The list containing the taxonomic pathways.
         
     Returns:
-       The function return a list for the accession numbers and one for the pathways.
+       The function appends to a list for the accession numbers and one for the pathways.
     """
     #open the FASTA file
-    sourceText=open(filename,"r")
-    #create a list which contain one line per index
-    source=sourceText.read().splitlines(1)
-    #loop to only keep the headers
-    for i in range(0,len(source),2):
-        if '>' in source[i]:
-            #to store accession number in list
-            try:
-                acs.append(getIndex(source[i],">","-",1,0))
-	    except ValueError:
-                acs.append(getIndex(source[i],">"," ",1,0))
-            #to store taxonomic pathways in list
-            pth1=(getIndex(source[i]," ","\n",1,0))
-            pth.append(pth1.split(";"))
-    sourceText.close()
-    return acs,pth
+    far = open(filename,"r")
+    for line in far:
+        if line[0]==">":
+            ac = line[line.find(":")+1:line.find(" ")]
+            pt = line[line.find(" ")+1:-1]
+            acs.append(ac)
+            pth.append(pt.split(";"))
+    far.close()
 
 def counter(sftLst,refLst,errLst):
     """
@@ -62,7 +53,7 @@ def counter(sftLst,refLst,errLst):
     Returns:
        The function a list with scores for each taxonomic level studied.
     """
-    for i in range (0, 8):
+    for i in range (0, 9):
         if sftLst[i]==refLst[i] and sftLst[i]!="None" and refLst!="None":
             errLst.append("TP")
         
@@ -86,9 +77,9 @@ def correctLength(lst):
        lst: correspond to the list we want to correct the length in order to compare it in the counter function.
         
     Returns:
-       A list of length=8.
+       A list of length=9.
     """
-    while len(lst)<8:
+    while len(lst)<9:
         lst.append("None")
     for i in range(0,len(lst)):
         if lst[i]=="No hits":
@@ -99,7 +90,7 @@ def scorePerLevel(lst,dct):
     """
     Args:
         lst: correspond to the list of score in each taxonomic level of each accession number.
-        dct: Is a list of 8 dictionaries (for each level) containing the 4 score possible
+        dct: Is a list of 9 dictionaries (for each level) containing the 4 score possible
     Returns:
        returns the list of dictionaries containing the scores at each taxonomic level
   
@@ -118,7 +109,7 @@ def scorePerLevel(lst,dct):
 def main():
     
     #Creation of the phylogenetic tree from the database
-    database="unite"
+    database="silvamod128"
     mapFile = ("%s/%s.map" %
                (config.DATABASES[database], database))
     treFile = ("%s/%s.tre" %
@@ -140,17 +131,11 @@ def main():
     #Set the result lists
     errorList=[]
     matrix=[]
-    taxaName=['Domain','Kingdom','Phylum','Class','Order','Family','Genus','Specie']
+    taxaName=["Meta","Domain","Superkingdom","Kingdom","Phylum","Class","Order","Family","Genus"]
     #set total
-    score_total=[{'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0},
-                {'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0},
-                {'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0},
-                {'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0},
-                {'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0},
-                {'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0},
-                {'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0},
-                {'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0}]
-
+    score_total= []
+    for depth in taxaName:
+        score_total.append({'True Positive':0,'True Negative':0,'False Positive':0,'False Negative':0})
 
     for i in range(0,len(accessionListFasta)):
         if reftree.getNode(accessionListFasta[i]):
@@ -159,7 +144,7 @@ def main():
         
     
         #Count the TP,FP,TN,FN in the result
-            counter(correctLength(seqPath[i]),correctLength(refPath[:-1]),errorList)
+            counter(correctLength(seqPath[i]),correctLength(refPath),errorList)
             matrix.append(errorList)
 
         #Calcule the amount of each score in each taxonomic level
@@ -174,7 +159,7 @@ def main():
         #Remove the hash to verify the score for each domain of each accession number
         resultList=zip(taxaName,matrix[i])
         print accessionListFasta[i], '\t', resultList
-        print seqPath[i],'\n', refPath[:-1],'\n\n'
+        print seqPath[i],'\n', refPath,'\n\n'
         
         
         

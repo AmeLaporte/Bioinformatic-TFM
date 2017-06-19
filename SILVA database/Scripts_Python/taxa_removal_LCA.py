@@ -88,7 +88,7 @@ def outputFasta(data,filename,filename2,lst):
 def main():
     
     #Creation of the phylogenetic tree from the database
-    database="unite"
+    database="silvamod"
     mapFile = ("%s/%s.map" %
                (config.DATABASES[database], database))
     treFile = ("%s/%s.tre" %
