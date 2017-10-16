@@ -37,7 +37,10 @@ def parserFasta(filename,acs,pth):
     far = open(filename,"r")
     for line in far:
         if line[0]==">":
-            ac = line[line.find(":")+1:line.find(" ")]
+            if ":" in line:
+                ac = line[line.find(":")+1:line.find(" ")]
+            else:
+                ac = line[1:line.find(" ")]
             pt = line[line.find(" ")+1:-1]
             acs.append(ac)
             pth.append(pt.split(";"))
